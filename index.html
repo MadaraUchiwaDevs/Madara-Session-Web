@@ -3,14 +3,115 @@
 <head>
   <meta charset="UTF-8">
   <title>Madara Session ID</title>
+
+  <style>
+    body {
+      background: linear-gradient(160deg, #000000, #2b0000);
+      color: white;
+      font-family: "Segoe UI", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.75);
+      padding: 35px;
+      border-radius: 18px;
+      text-align: center;
+      width: 340px;
+      box-shadow: 0 0 30px crimson;
+    }
+
+    img {
+      width: 140px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      border: 3px solid crimson;
+    }
+
+    h1 {
+      margin: 10px 0 5px;
+      color: crimson;
+    }
+
+    h3 {
+      margin: 0 0 15px;
+      font-weight: normal;
+      font-size: 15px;
+      color: #ddd;
+    }
+
+    p {
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px;
+      border-radius: 10px;
+      border: none;
+      margin: 12px 0;
+      outline: none;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: crimson;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: darkred;
+    }
+
+    #res {
+      margin-top: 18px;
+      word-break: break-all;
+      color: #00ffd5;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
 </head>
 <body>
-  <h2>🔐 Connexion WhatsApp — Madara Bot</h2>
 
-  <input id="num" placeholder="242XXXXXXXX">
-  <button onclick="gen()">Générer le code</button>
+  <div class="card">
 
-  <p id="res"></p>
+    <!-- IMAGE MADARA 4K -->
+    <img src="https://images.alphacoders.com/134/1342367.png" alt="Madara Uchiha">
+
+    <h1>🔥 Madara Session ID 🔥</h1>
+    <h3>Bienvenue chez <strong>Armand Lonz</strong></h3>
+
+    <p>Connecte ton WhatsApp via un code sécurisé<br>
+    pour activer <b>Madara Uchiwa Anna.D Bot V2</b></p>
+
+    <input id="num" placeholder="242XXXXXXXX">
+    <button onclick="gen()">Générer le code</button>
+
+    <div id="res"></div>
+
+    <footer>
+      © 2026 • MadaraUchiwaDevs
+    </footer>
+
+  </div>
 
   <script>
     async function gen() {
@@ -22,8 +123,10 @@
       });
       const d = await r.json();
       document.getElementById("res").innerText =
-        d.code ? "CODE : " + d.code : "Erreur";
+        d.code ? "CODE DE CONNEXION : " + d.code : "Erreur de génération";
     }
   </script>
+
 </body>
 </html>
+

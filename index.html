@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Madara Session ID</title>
+</head>
+<body>
+  <h2>🔐 Connexion WhatsApp — Madara Bot</h2>
+
+  <input id="num" placeholder="242XXXXXXXX">
+  <button onclick="gen()">Générer le code</button>
+
+  <p id="res"></p>
+
+  <script>
+    async function gen() {
+      const number = document.getElementById("num").value;
+      const r = await fetch("/pair", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ number })
+      });
+      const d = await r.json();
+      document.getElementById("res").innerText =
+        d.code ? "CODE : " + d.code : "Erreur";
+    }
+  </script>
+</body>
+</html>

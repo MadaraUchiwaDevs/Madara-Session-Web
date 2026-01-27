@@ -5,129 +5,142 @@
   <title>Madara Session ID</title>
 
   <style>
+    /* ===== FOND UCHIWA ===== */
     body {
       background:
-    linear-gradient(
-      rgba(0, 0, 0, 0.75),
-      rgba(0, 0, 0, 0.85)
-    ),
-    url("https://images.alphacoders.com/134/1342367.png");
-  background-size: cover;
-  background-position: center right;
-  background-repeat: no-repeat;
-  color: white;
-  font-family: "Segoe UI", sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-}
-
-      color: white;
+        radial-gradient(circle at top left, rgba(180, 0, 0, 0.18), transparent 45%),
+        linear-gradient(135deg, #000000, #140000);
+      background-size: cover;
+      background-position: center;
+      color: #f2f2f2;
       font-family: "Segoe UI", sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
+      overflow: hidden;
     }
 
+    /* ===== SHARINGAN DISCRET ANIMÉ ===== */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/Sharingan_triple.svg")
+        no-repeat center;
+      background-size: 240px;
+      opacity: 0.05;
+      animation: sharingan 14s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sharingan {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* ===== CARTE CENTRALE ===== */
     .card {
-      background: rgba(0, 0, 0, 0.75);
-      padding: 35px;
-      border-radius: 18px;
+      background: rgba(10, 0, 0, 0.75);
+      border: 1px solid rgba(255, 0, 0, 0.25);
+      box-shadow: 0 0 35px rgba(120, 0, 0, 0.45);
+      backdrop-filter: blur(8px);
+      padding: 38px;
+      border-radius: 20px;
+      width: 360px;
       text-align: center;
-      width: 340px;
-      box-shadow: 0 0 30px crimson;
-    }
-
-    img {
-      width: 140px;
-      border-radius: 50%;
-      margin-bottom: 15px;
-      border: 3px solid crimson;
+      z-index: 1;
     }
 
     h1 {
-      margin: 10px 0 5px;
-      color: crimson;
+      color: #d10000;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
     }
 
     h3 {
-      margin: 0 0 15px;
       font-weight: normal;
-      font-size: 15px;
-      color: #ddd;
+      font-size: 14px;
+      color: #d0d0d0;
+      margin-bottom: 18px;
     }
 
     p {
       font-size: 14px;
-      color: #aaa;
+      color: #bdbdbd;
+      margin-bottom: 22px;
     }
 
     input {
       width: 100%;
       padding: 11px;
-      border-radius: 10px;
-      border: none;
-      margin: 12px 0;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 0, 0, 0.3);
+      background: #0b0000;
+      color: white;
       outline: none;
       font-size: 15px;
+      margin-bottom: 15px;
+    }
+
+    input::placeholder {
+      color: #777;
     }
 
     button {
       width: 100%;
       padding: 12px;
-      border-radius: 10px;
+      background: linear-gradient(135deg, #5c0000, #b00000);
       border: none;
-      background: crimson;
+      border-radius: 9px;
       color: white;
-      font-size: 16px;
-      cursor: pointer;
       font-weight: bold;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.3s;
     }
 
     button:hover {
-      background: darkred;
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px rgba(255, 0, 0, 0.6);
     }
 
     #res {
       margin-top: 18px;
       word-break: break-all;
-      color: #00ffd5;
+      color: #ff4d4d;
       font-weight: bold;
+      font-size: 14px;
     }
 
     footer {
-      margin-top: 20px;
+      margin-top: 22px;
       font-size: 12px;
       color: #777;
     }
   </style>
 </head>
+
 <body>
 
   <div class="card">
+    <h1>🧿 MADARA SESSION</h1>
+    <h3>Bienvenue <strong>Armand Lonz</strong></h3>
 
-    <!-- IMAGE MADARA 4K -->
-    <img src="https://images.alphacoders.com/134/1342367.png" alt="Madara Uchiha">
-
-    <h1>🔥 Madara Session ID 🔥</h1>
-    <h3>Bienvenue chez <strong>Armand Lonz</strong></h3>
-
-    <p>Connecte ton WhatsApp via un code sécurisé<br>
-    pour activer <b>Madara Uchiwa Anna.D Bot V2</b></p>
+    <p>
+      Générateur officiel de Session ID WhatsApp<br>
+      pour <b>Madara Uchiwa Anna.D Bot V2</b>
+    </p>
 
     <input id="num" placeholder="242XXXXXXXX">
-    <button onclick="gen()">Générer le code</button>
+    <button onclick="gen()">GÉNÉRER LE CODE</button>
 
     <div id="res"></div>
 
     <footer>
       © 2026 • MadaraUchiwaDevs
     </footer>
-
   </div>
 
   <script>
@@ -146,4 +159,5 @@
 
 </body>
 </html>
+
 

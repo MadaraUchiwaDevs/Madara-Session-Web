@@ -22,7 +22,6 @@
       overflow: hidden;
     }
 
-    /* ===== SHARINGAN DISCRET ANIMÉ ===== */
     body::before {
       content: "";
       position: fixed;
@@ -40,7 +39,6 @@
       to   { transform: rotate(360deg); }
     }
 
-    /* ===== CARTE CENTRALE ===== */
     .card {
       background: rgba(10, 0, 0, 0.75);
       border: 1px solid rgba(255, 0, 0, 0.25);
@@ -53,24 +51,9 @@
       z-index: 1;
     }
 
-    h1 {
-      color: #d10000;
-      letter-spacing: 2px;
-      margin-bottom: 6px;
-    }
-
-    h3 {
-      font-weight: normal;
-      font-size: 14px;
-      color: #d0d0d0;
-      margin-bottom: 18px;
-    }
-
-    p {
-      font-size: 14px;
-      color: #bdbdbd;
-      margin-bottom: 22px;
-    }
+    h1 { color: #d10000; letter-spacing: 2px; }
+    h3 { font-size: 14px; color: #d0d0d0; }
+    p  { font-size: 14px; color: #bdbdbd; }
 
     input {
       width: 100%;
@@ -79,13 +62,8 @@
       border: 1px solid rgba(255, 0, 0, 0.3);
       background: #0b0000;
       color: white;
-      outline: none;
       font-size: 15px;
       margin-bottom: 15px;
-    }
-
-    input::placeholder {
-      color: #777;
     }
 
     button {
@@ -96,22 +74,25 @@
       border-radius: 9px;
       color: white;
       font-weight: bold;
-      letter-spacing: 1px;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.3s;
     }
 
-    button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 0 18px rgba(255, 0, 0, 0.6);
+    textarea {
+      width: 100%;
+      height: 120px;
+      margin-top: 10px;
+      background: #0b0000;
+      color: #fff;
+      border: 1px solid rgba(255,0,0,.4);
+      border-radius: 8px;
+      padding: 8px;
     }
 
     #res {
       margin-top: 18px;
-      word-break: break-all;
       color: #ff4d4d;
-      font-weight: bold;
       font-size: 14px;
+      word-break: break-all;
     }
 
     footer {
@@ -124,40 +105,75 @@
 
 <body>
 
-  <div class="card">
-    <h1>🧿 MADARA SESSION</h1>
-    <h3>Bienvenue <strong>Armand Lonz</strong></h3>
+<div class="card">
+  <h1>🧿 MADARA SESSION</h1>
+  <h3>Bienvenue <b>Armand Lonz</b></h3>
 
-    <p>
-      Générateur officiel de Session ID WhatsApp<br>
-      pour <b>Madara Uchiwa Anna.D Bot V2</b>
-    </p>
+  <p>
+    Générateur officiel de Session ID WhatsApp<br>
+    <b>Madara Uchiwa Anna.D Bot V2</b>
+  </p>
 
-    <input id="num" placeholder="242XXXXXXXX">
-    <button onclick="gen()">GÉNÉRER LE CODE</button>
+  <input id="num" placeholder="+242XXXXXXXX">
+  <button onclick="gen()">GÉNÉRER LA SESSION</button>
 
-    <div id="res"></div>
+  <div id="res"></div>
 
-    <footer>
-      © 2026 • MadaraUchiwaDevs
-    </footer>
-  </div>
+  <footer>© 2026 • MadaraUchiwaDevs</footer>
+</div>
 
-  <script>
-    async function gen() {
-      const number = document.getElementById("num").value;
-      const r = await fetch("/pair", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ number })
-      });
-      const d = await r.json();
-      document.getElementById("res").innerText =
-        d.code ? "CODE DE CONNEXION : " + d.code : "Erreur de génération";
-    }
-  </script>
+<script>
+async function gen() {
+  const num = document.getElementById("num").value;
+  const res = document.getElementById("res");
+
+  if (!num.startsWith("+")) {
+    res.innerHTML = "❌ Le numéro doit commencer par + (ex: +242…)";
+    return;
+  }
+
+  res.innerHTML = "⏳ Génération du code WhatsApp...";
+
+  const r = await fetch("/session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ number: num })
+  });
+
+  const d = await r.json();
+
+  if (d.pairing_code) {
+    res.innerHTML =
+      "📲 <b>CODE WHATSAPP</b><br><br>" +
+      "<b style='font-size:18px'>" + d.pairing_code + "</b><br><br>" +
+      "👉 WhatsApp → Appareils connectés<br>" +
+      "⏳ Attente de validation...";
+  }
+
+  if (d.session_id) {
+    res.innerHTML = `
+      🔐 <b>SESSION ID GÉNÉRÉE</b><br>
+      <textarea id="sid">${d.session_id}</textarea>
+      <button onclick="copy()">📋 COPIER LA SESSION</button>
+      <p style="color:#ff7777;font-size:12px">
+        ⚠️ Ne partage jamais ta Session ID
+      </p>
+    `;
+  }
+
+  if (d.error) res.innerHTML = "❌ " + d.error;
+}
+
+function copy() {
+  const t = document.getElementById("sid");
+  t.select();
+  document.execCommand("copy");
+  alert("✅ Session copiée !");
+}
+</script>
 
 </body>
 </html>
+
 
 
